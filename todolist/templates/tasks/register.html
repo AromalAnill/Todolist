@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Task Calendar{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-center mb-4">Register</h1>
+                    
+                    {% if success %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div class="text-center mt-4">
+                        <p>Redirecting to login page...</p>
+                        <script>
+                            setTimeout(() => {
+                                window.location.href = "{% url 'login' %}";
+                            }, 2000);
+                        </script>
+                    </div>
+                    {% else %}
+                    <form method="post" novalidate id="registerForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.username.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.phone_number.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <small class="form-text text-muted">Format: +1234567890 or 1234567890</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">Password</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.password1.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <small class="form-text text-muted d-block mt-2">
+                                Password requirements:
+                                <ul class="mb-0 mt-1 ps-3">
+                                    <li>At least 8 characters</li>
+                                    <li>At least one number</li>
+                                    <li>At least one special character (!@#$%^&* etc.)</li>
+                                </ul>
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">Confirm Password</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.password2.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}<br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+                    </form>
+
+                    <div class="text-center">
+                        <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    main {
+        flex: 1;
+    }
+</style>
+{% endblock %}

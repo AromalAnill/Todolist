@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Task Calendar{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-center mb-4">Login</h1>
+                    
+                    <!-- Authentication Status Message -->
+                    <div id="messageBox" class="alert alert-dismissible fade" role="alert" style="display: none;">
+                        <span id="messageText"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    
+                    <form method="post" novalidate id="loginForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Phone Number</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.username.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.password.errors %}
+                                <small>{{ error }}</small><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                            <strong>Password Incorrect / User Not Found</strong><br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+
+                    <div class="text-center">
+                        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    main {
+        flex: 1;
+    }
+</style>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        
+        // Check for errors on form submission
+        if (document.querySelectorAll('.text-danger').length > 0) {
+            messageBox.className = 'alert alert-danger alert-dismissible fade show';
+            messageText.textContent = 'Password Incorrect / User Not Found';
+            messageBox.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}
